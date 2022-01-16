@@ -1,0 +1,6 @@
+pretrained_models/
+model/
+data/atomic/processed/
+.vscode/
+.DS_Store
+pretrained_models.tar
