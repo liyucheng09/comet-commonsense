@@ -17,7 +17,7 @@ arguments     = $ENV(HOME)/comet-commonsense/scripts/generate/generate_atomic_be
   --beam 8 \
   --model_name /vol/research/lyc_d/pretrained_models/atomic_pretrained_model.pickle \
   --require_beam_score \
-  --project_name $ENV(HOME)/comet-commonsense/ \
+  --project_path $ENV(HOME)/comet-commonsense/ \
 
 # ---------------------------------------------------
 # Universe (vanilla, docker)
@@ -26,9 +26,9 @@ docker_image     = nvidia/cuda:10.2-cudnn7-runtime-ubuntu16.04
 
 # -------------------------------------------------
 # Event, out and error logs
-log    = c$(cluster).p$(process).mermaid.log
-output = c$(cluster).p$(process).mermaid.out
-error  = c$(cluster).p$(process).mermaid.error
+log    = c$(cluster).p$(process).comet.log
+output = c$(cluster).p$(process).comet.out
+error  = c$(cluster).p$(process).comet.error
 
 # -----------------------------------
 # File Transfer, Input, Output
@@ -57,12 +57,12 @@ request_CPUs     = 1
 request_memory   = 8G
 
 #This job will complete in less than 1 hour
-+JobRunTime = 5
++JobRunTime = 7
 
 #This job can checkpoint
 +CanCheckpoint = true
 
 # -----------------------------------
 # Queue commands
-queue 1 input_file in cola_sentence.input, mrpc_sentence1.input, mrpc_sentence2.input, qnli_question.input, qnli_sentence.input, qqp_question1.input, qqp_question2.input, rte_sentence1.input, rte_sentence2.input, sst2_sentence.input, stsb_sentence1.input, stsb_sentence2.input, wnli_sentence1.input, wnli_sentence2.input
+queue 1 
 

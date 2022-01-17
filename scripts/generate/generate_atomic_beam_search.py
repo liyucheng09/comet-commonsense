@@ -4,7 +4,7 @@ import sys
 import pickle
 import argparse
 
-sys.path.append(os.getcwd())
+sys.path.append('/user/HS502/yl02706/comet-commonsense/')
 import torch
 
 import src.train.atomic_train as train
@@ -78,8 +78,7 @@ loaded = data_loader.load_data(path)
 data_loader.batch_size = opt.train.dynamic.bs
 
 print("Done.")
-
-text_encoder = TextEncoder(config.encoder_path, config.bpe_path)
+text_encoder = TextEncoder(os.path.join(args.project_path, config.encoder_path), os.path.join(args.project_path, config.bpe_path))
 
 special = [data.start_token, data.end_token]
 special += ["<{}>".format(cat) for cat in categories]
@@ -307,7 +306,7 @@ with torch.no_grad():
         sequence_all['beams'] = beams
         final_sequences['sequence'].append(sequence_all)
         if args.require_beam_score:
-            final_sequences['beam_losses'].append(torch.exp(beam_losses[-1]).numpy())
+            final_sequences['beam_losses'].append(torch.exp(beam_losses[-1]).cpu().numpy())
 
 
 utils.mkpath("/".join(eval_file_name.split("/")[:-1]))
