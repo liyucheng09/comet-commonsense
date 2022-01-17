@@ -34,6 +34,9 @@ parser.add_argument("--seed", type=int, default=42)
 parser.add_argument("--experiment_num", type=str, default="0")
 parser.add_argument("--model_name", type=str, default="models/atomic-generation/iteration-500-50000/transformer/categories_oEffect#oReact#oWant#xAttr#xEffect#xIntent#xNeed#xReact#xWant-maxe1_17-maxe2_35-maxr_1/model_transformer-nL_12-nH_12-hSize_768-edpt_0.1-adpt_0.1-rdpt_0.1-odpt_0.1-pt_gpt-afn_gelu-init_pt-vSize_40542/exp_generation-seed_123-l2_0.01-vl2_T-lrsched_warmup_linear-lrwarm_0.002-clip_1-loss_nll-b2_0.999-b1_0.9-e_1e-08/bs_1-smax_40-sample_greedy-numseq_1-gs_1000-es_1000-categories_oEffect#oReact#oWant#xAttr#xEffect#xIntent#xNeed#xReact#xWant/6.25e-05_adam_64_22000.pickle")
 parser.add_argument("--gen_len", type=int, default=100)
+parser.add_argument("--require_beam_score", action='store_true')
+parser.add_argument("--project_path", type=str)
+
 
 args = parser.parse_args()
 split = args.split
@@ -42,7 +45,7 @@ split = args.split
 # utils.generate_config_files("atomic", args.experiment_num, eval_mode=True)
 
 # Loads the correct configuration file
-config_file = "config/atomic/config_{}.json".format(args.experiment_num)
+config_file = os.path.join(args.project_path, "config/atomic/config_{}.json".format(args.experiment_num))
 
 # Read config file to option
 config = cfg.read_config(cfg.load_config(config_file))
@@ -67,8 +70,8 @@ print("Loading Data")
 
 categories = opt.data.categories
 
-path = "data/atomic/processed/generation/{}.pickle".format(
-    utils.make_name_string(opt.data))
+path = os.path.join(args.project_path, "data/atomic/processed/generation/{}.pickle".format(
+    utils.make_name_string(opt.data)) )
 data_loader = data.make_data_loader(opt, categories)
 loaded = data_loader.load_data(path)
 
@@ -303,7 +306,8 @@ with torch.no_grad():
 
         sequence_all['beams'] = beams
         final_sequences['sequence'].append(sequence_all)
-        final_sequences['beam_losses'].append([i.numpy() for i in beam_losses])
+        if args.require_beam_score:
+            final_sequences['beam_losses'].append(torch.exp(beam_losses[-1]).numpy())
 
 
 utils.mkpath("/".join(eval_file_name.split("/")[:-1]))
