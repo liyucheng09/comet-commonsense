@@ -16,7 +16,7 @@ from src.train.opt import OpenAIAdam
 
 def main(num):
     # Generate configuration files depending on experiment being run
-    utils.generate_config_files("atomic", num)
+    # utils.generate_config_files("atomic", num)
 
     # Loads the correct configuration file
     config_file = "config/atomic/config_{}.json".format(num)

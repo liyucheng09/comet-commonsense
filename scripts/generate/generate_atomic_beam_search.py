@@ -5,6 +5,7 @@ import pickle
 import argparse
 
 sys.path.append('/user/HS502/yl02706/comet-commonsense/')
+sys.path.append(os.getcwd())
 import torch
 
 import src.train.atomic_train as train
@@ -35,7 +36,7 @@ parser.add_argument("--experiment_num", type=str, default="0")
 parser.add_argument("--model_name", type=str, default="models/atomic-generation/iteration-500-50000/transformer/categories_oEffect#oReact#oWant#xAttr#xEffect#xIntent#xNeed#xReact#xWant-maxe1_17-maxe2_35-maxr_1/model_transformer-nL_12-nH_12-hSize_768-edpt_0.1-adpt_0.1-rdpt_0.1-odpt_0.1-pt_gpt-afn_gelu-init_pt-vSize_40542/exp_generation-seed_123-l2_0.01-vl2_T-lrsched_warmup_linear-lrwarm_0.002-clip_1-loss_nll-b2_0.999-b1_0.9-e_1e-08/bs_1-smax_40-sample_greedy-numseq_1-gs_1000-es_1000-categories_oEffect#oReact#oWant#xAttr#xEffect#xIntent#xNeed#xReact#xWant/6.25e-05_adam_64_22000.pickle")
 parser.add_argument("--gen_len", type=int, default=100)
 parser.add_argument("--require_beam_score", action='store_true')
-parser.add_argument("--project_path", type=str)
+parser.add_argument("--project_path", type=str, default=os.getcwd())
 
 
 args = parser.parse_args()
