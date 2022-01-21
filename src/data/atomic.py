@@ -269,7 +269,7 @@ def get_generation_sequences(opt, data, split, text_encoder, test):
     final_prefix = None
     final_suffix = None
 
-    for prefix, category, suffix in tqdm(data[split]["total"]):
+    for prefix, category, suffix in tqdm(data[split]["total"][:10]):
         final_prefix, final_suffix = do_example(
             text_encoder, prefix, suffix, True, True)
         # if do_prefix:

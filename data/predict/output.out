@@ -1,0 +1,81 @@
+Loading data from: data/conceptnet/processed/generation/rel_language-trainsize_100-devversion_12-maxe1_10-maxe2_15-maxr_5.pickle
+31
+Give an input entity (e.g., go on a hike -- works best if words are lemmatized): Give a relation (type "help" for an explanation): Give a sampling algorithm (type "help" for an explanation): Input Entity:    Her husband often abuses alcohol.
+Target Relation: SymbolOf
+
+Candidate Sequences:
+&*&*
+infidelity
+violence
+abuse
+divorce
+alcoholic lifestyle
+
+====================================================
+
+Give an input entity (e.g., go on a hike -- works best if words are lemmatized): Give a relation (type "help" for an explanation): Give a sampling algorithm (type "help" for an explanation): Input Entity:    Her husband often drinks alcohol.
+Target Relation: SymbolOf
+
+Candidate Sequences:
+&*&*
+infidelity
+marriage
+drunkenness
+love
+divorce
+
+====================================================
+
+Give an input entity (e.g., go on a hike -- works best if words are lemmatized): Give a relation (type "help" for an explanation): Give a sampling algorithm (type "help" for an explanation): Input Entity:    The tax cut will improve the economy.
+Target Relation: SymbolOf
+
+Candidate Sequences:
+&*&*
+wealth
+prosperity
+good life
+economic growth
+economy
+
+====================================================
+
+Give an input entity (e.g., go on a hike -- works best if words are lemmatized): Give a relation (type "help" for an explanation): Give a sampling algorithm (type "help" for an explanation): Input Entity:    The tax cut will boost the economy.
+Target Relation: SymbolOf
+
+Candidate Sequences:
+&*&*
+wealth
+prosperity
+economic growth
+economy
+good economy
+
+====================================================
+
+Give an input entity (e.g., go on a hike -- works best if words are lemmatized): Give a relation (type "help" for an explanation): Give a sampling algorithm (type "help" for an explanation): Input Entity:    We have exhausted the food supplies.
+Target Relation: SymbolOf
+
+Candidate Sequences:
+&*&*
+hunger
+starvation
+defeat
+we d
+conserve energy
+
+====================================================
+
+Give an input entity (e.g., go on a hike -- works best if words are lemmatized): Give a relation (type "help" for an explanation): Give a sampling algorithm (type "help" for an explanation): Input Entity:    We have used up the food supplies.
+Target Relation: SymbolOf
+
+Candidate Sequences:
+&*&*
+we d
+conserve resource
+rationing
+hunger
+conserve
+
+====================================================
+
+Give an input entity (e.g., go on a hike -- works best if words are lemmatized): 
