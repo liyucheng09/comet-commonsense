@@ -138,7 +138,7 @@ def print_atomic_sequence(sequence_object):
     print("Input Event:   {}".format(input_event))
     print("Target Effect: {}".format(category))
     print("")
-    print("Candidate Sequences:")
+    print("Candidate Sequences:\n&*&*")
     for beam in sequence_object["beams"]:
         print(beam)
     print("")
@@ -325,7 +325,7 @@ def print_conceptnet_sequence(sequence_object):
     print("Input Entity:    {}".format(e1))
     print("Target Relation: {}".format(relation))
     print("")
-    print("Candidate Sequences:")
+    print("Candidate Sequences:\n&*&*")
     for beam in sequence_object["beams"]:
         print(beam)
     print("")

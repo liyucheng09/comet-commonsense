@@ -1,6 +1,6 @@
 pretrained_models/
 model/
-data/atomic/processed/
+data/*/processed/
 .vscode/
 .DS_Store
 pretrained_models.tar
@@ -8,3 +8,8 @@ pretrained_models.tar
 *.log
 *.out
 __pycache__/
+garbage/
+**/__pycache__
+logs/
+*.pyc
+data/zh
