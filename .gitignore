@@ -7,3 +7,5 @@ pretrained_models.tar
 garbage/
 **/__pycache__
 logs/
+*.pyc
+data/zh

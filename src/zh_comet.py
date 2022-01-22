@@ -1,12 +1,16 @@
 from transformers import (GPT2LMHeadModel, 
                     BertTokenizer, 
                     TextGenerationPipeline,
-                    Trainer)
+                    Trainer,
+                    default_data_collator)
 import os
 import sys
 import torch
 from torch.nn import CrossEntropyLoss
 from transformers.modeling_outputs import CausalLMOutputWithCrossAttentions
+from datasets import load_from_disk
+from lyc.utils import get_tokenizer
+from lyc.train import get_base_hf_args
 
 class ZhComet(GPT2LMHeadModel):
 
@@ -66,9 +70,10 @@ class ZhComet(GPT2LMHeadModel):
             shift_logits = lm_logits[..., :-1, :].contiguous()
             shift_labels = labels[..., 1:].contiguous()
             # Flatten the tokens
-            loss_fct = CrossEntropyLoss(reduction='none' if labels_weights is not None else 'mean')
+            loss_fct = CrossEntropyLoss(reduction='none' if labels_weights is not None else 'mean', ignore_index=0)
             loss = loss_fct(shift_logits.view(-1, shift_logits.size(-1)), shift_labels.view(-1))
             if labels_weights is not None:
+                labels_weights = labels_weights.repeat(shift_logits.shape[1], 1).transpose(1,0).contiguous().view(-1)
                 loss = (loss * labels_weights).mean()
 
         if not return_dict:
@@ -84,12 +89,75 @@ class ZhComet(GPT2LMHeadModel):
             cross_attentions=transformer_outputs.cross_attentions,
         )
 
+def make_dataset(model_type, tokenizer, max_length):
+    path = f'data/zh/{model_type}_dataset'
+    ds = load_from_disk(path)
+
+    def preprocess(examples):
+        line = examples['line']
+        text = line[0] +' <'+line[1] +'> ' + line[2]
+        result = tokenizer(text, max_length = max_length, truncation='longest_first', padding='max_length')
+        result['labels'] = result["input_ids"].copy()
+        if model_type == 'distill':
+            result['labels_weights'] = examples['score']
+        return result
+
+    ds = ds.map(preprocess, remove_columns=ds.column_names)
+    return ds
+
+
+def customize_tokenizer(tokenizer):
+    categories = []
+    categories += ["oEffect"]
+    categories += ["oReact"]
+    categories += ["oWant"]
+    categories += ["xAttr"]
+    categories += ["xEffect"]
+    categories += ["xIntent"]
+    categories += ["xNeed"]
+    categories += ["xReact"]
+    categories += ["xWant"]
+
+    effect_types = ['<' + i + '>' for i in categories]
+    special_tokens = ['PersonX', 'PersonY'] + effect_types
+
+    tokenizer.add_tokens(special_tokens, special_tokens=True)
+    pad_id = tokenizer.pad_token_id
+
+    return tokenizer, pad_id
 
 if __name__ == '__main__':
-    model_name, = sys.argv[1:]
+    # model_name: gpt model path or name,
+    # model_type: baseline / distill
+    model_name, model_type, output_path, logging_dir, = sys.argv[1:]
+    max_length = 128
+    assert model_type in ['baseline', 'distill']
 
-    # preparing dataset
+    tokenizer = get_tokenizer('bert-base-chinese')
+    tokenizer, pad_id = customize_tokenizer(tokenizer)
+
+    ds = make_dataset(model_type, tokenizer, max_length)
 
     # preparing model
     model = ZhComet.from_pretrained(model_name)
+    model.resize_token_embeddings(len(tokenizer))
+
+    args = get_base_hf_args(
+        output_dir=output_path,
+        train_batch_size=32,
+        epochs = 5,
+        logging_steps=500,
+        logging_dir = logging_dir,
+    )
+
+    trainer = Trainer(
+        model=model,
+        args=args,
+        train_dataset=ds,
+        tokenizer=tokenizer,
+    )
+
+    trainer.train()
+    trainer.save_model()
+
     
