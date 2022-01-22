@@ -4,3 +4,7 @@ data/atomic/processed/
 .vscode/
 .DS_Store
 pretrained_models.tar
+*.error
+*.log
+*.out
+__pycache__/
