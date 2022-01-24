@@ -89,8 +89,9 @@ class ZhComet(GPT2LMHeadModel):
             cross_attentions=transformer_outputs.cross_attentions,
         )
 
-def make_dataset(model_type, tokenizer, max_length):
-    path = f'data/zh/{model_type}_dataset'
+def make_dataset(model_type, tokenizer, max_length, data_path='data/zh/'):
+    path = os.path.join(data_path, f'{model_type}_dataset')
+    print(data_path, path)
     ds = load_from_disk(path)
 
     def preprocess(examples):
@@ -129,14 +130,14 @@ def customize_tokenizer(tokenizer):
 if __name__ == '__main__':
     # model_name: gpt model path or name,
     # model_type: baseline / distill
-    model_name, model_type, output_path, logging_dir, = sys.argv[1:]
+    model_name, model_type, output_path, logging_dir, data_path, = sys.argv[1:]
     max_length = 128
     assert model_type in ['baseline', 'distill']
 
     tokenizer = get_tokenizer('bert-base-chinese')
     tokenizer, pad_id = customize_tokenizer(tokenizer)
 
-    ds = make_dataset(model_type, tokenizer, max_length)
+    ds = make_dataset(model_type, tokenizer, max_length, data_path=data_path)
 
     # preparing model
     model = ZhComet.from_pretrained(model_name)

@@ -1,0 +1,67 @@
+####################
+#
+# Example Job for HTCondor
+#
+####################
+
+#---------------------------------------------
+# Name your batch so it's easy to distinguish in the q.
+JobBatchName = "ZH COMET"
+
+# --------------------------------------------
+model_name = uer/gpt2-chinese-cluecorpussmall
+output_path = /vol/research/lyc_d/comet/zh_comet/checkpoint_$(model_type)/
+logging_dir = /vol/research/lyc_d/comet/zh_comet/logs/
+data_path = /vol/research/lyc_d/comet/zh/
+
+# Executable and its arguments
+executable    = $ENV(HOME)/.conda/envs/lyc/bin/python
+arguments     = $ENV(HOME)/comet-commonsense/zh_comet.py $(model_name) $(model_type) $(output_path) $(logging_dir) $(data_path)
+
+# ---------------------------------------------------
+# Universe (vanilla, docker)
+universe         = docker
+docker_image     = nvidia/cuda:10.2-cudnn7-runtime-ubuntu16.04
+
+# -------------------------------------------------
+# Event, out and error logs
+log    = c$(cluster).p$(process).zhcomet.log
+output = c$(cluster).p$(process).zhcomet.out
+error  = c$(cluster).p$(process).zhcomet.error
+
+# -----------------------------------
+# File Transfer, Input, Output
+should_transfer_files = YES
+
+# Make certain project spaces available in container
+# environment = "mount=$ENV(HOME)"
+# environment = "mount=$ENV(HOME),/vol/research/nlg,/vol/research/lyc_d"
+environment = "mount=/vol/research/nlg,/vol/research/lyc_d"
+# environment = "mount='/vol/research/nlg'"
+# environment = "mount='/vol/research/lyc_d'"
+
+# -------------------------------------
+# Requirements for the Job (Requirements are explained in further detail in example09.submit_file)
+# NOTE: HasStornext is not valid on orca.
+requirements = (CUDAGlobalMemoryMb > 8000) && (CUDAGlobalMemoryMb <  25000) && \
+#              (HasStornext) && \
+			   (CUDACapability > 2.0) && (CUDACapability < 8.0)
+
+# --------------------------------------
+# Resources
+request_GPUs     = 1
+# this needs to be specified for the AI@Surrey cluster if requesting a GPU
++GPUMem          = 10000
+request_CPUs     = 1
+request_memory   = 8G
+
+#This job will complete in less than 1 hour
++JobRunTime = 10
+
+#This job can checkpoint
++CanCheckpoint = true
+
+# -----------------------------------
+# Queue commands
+queue 1 model_type in distill, baseline
+
