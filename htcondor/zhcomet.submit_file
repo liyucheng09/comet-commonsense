@@ -63,5 +63,5 @@ request_memory   = 8G
 
 # -----------------------------------
 # Queue commands
-queue 1 model_type in distill, baseline
+queue 1 model_type in distill
 

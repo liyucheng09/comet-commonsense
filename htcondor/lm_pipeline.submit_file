@@ -10,7 +10,7 @@ JobBatchName = "LM PIPELINE"
 
 # --------------------------------------------
 
-model_path = /vol/research/lyc_d/comet/zh_comet/checkpoint_distill
+model_path = /vol/research/lyc_d/comet/zh_comet/checkpoint_baseline
 beam = 5
 
 # Executable and its arguments

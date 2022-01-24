@@ -143,7 +143,7 @@ if __name__ == '__main__':
     # preparing model
     model = ZhComet.from_pretrained(model_name)
     model.resize_token_embeddings(len(tokenizer))
-    model.eos_token_id = end_id
+    model.config.eos_token_id = end_id
 
     args = get_base_hf_args(
         output_dir=output_path,
