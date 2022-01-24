@@ -96,7 +96,7 @@ def make_dataset(model_type, tokenizer, max_length, data_path='data/zh/'):
 
     def preprocess(examples):
         line = examples['line']
-        text = line[0] +' <'+line[1] +'> ' + line[2]
+        text = line[0] +' <'+line[1] +'> ' + line[2] +'<END>'
         result = tokenizer(text, max_length = max_length, truncation='longest_first', padding='max_length')
         result['labels'] = result["input_ids"].copy()
         if model_type == 'distill':
@@ -120,7 +120,7 @@ def customize_tokenizer(tokenizer):
     categories += ["xWant"]
 
     effect_types = ['<' + i + '>' for i in categories]
-    special_tokens = ['PersonX', 'PersonY'] + effect_types
+    special_tokens = ['PersonX', 'PersonY', '<END>'] + effect_types
 
     tokenizer.add_tokens(special_tokens, special_tokens=True)
     pad_id = tokenizer.pad_token_id
@@ -136,12 +136,14 @@ if __name__ == '__main__':
 
     tokenizer = get_tokenizer('bert-base-chinese')
     tokenizer, pad_id = customize_tokenizer(tokenizer)
+    end_id = tokenizer.convert_tokens_to_ids('<END>')
 
     ds = make_dataset(model_type, tokenizer, max_length, data_path=data_path)
 
     # preparing model
     model = ZhComet.from_pretrained(model_name)
     model.resize_token_embeddings(len(tokenizer))
+    model.eos_token_id = end_id
 
     args = get_base_hf_args(
         output_dir=output_path,
