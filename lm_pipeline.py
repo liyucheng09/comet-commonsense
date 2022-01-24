@@ -1,5 +1,7 @@
 from transformers import BertTokenizer, GPT2LMHeadModel, TextGenerationPipeline
 import sys
+import codecs
+sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
 
 if __name__ == '__main__':
 
