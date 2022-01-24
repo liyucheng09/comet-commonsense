@@ -10,7 +10,7 @@ JobBatchName = "conceptnet gen"
 
 # --------------------------------------------
 
-input_file = $ENV(HOME)/comet-commonsense/data/predict/moh
+input_file = $ENV(HOME)/comet-commonsense/data/predict/$(data_type).moh
 output_file = $(input_file).out
 
 # Executable and its arguments
@@ -68,5 +68,5 @@ request_memory   = 8G
 
 # -----------------------------------
 # Queue commands
-queue 1 
+queue 1 data_type in literal, metaphor
 
