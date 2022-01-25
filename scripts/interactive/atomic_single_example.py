@@ -4,6 +4,7 @@ import argparse
 import torch
 
 sys.path.append(os.getcwd())
+sys.path.append('/user/HS502/yl02706/comet-commonsense/')
 
 import src.data.data as data
 import src.data.config as cfg

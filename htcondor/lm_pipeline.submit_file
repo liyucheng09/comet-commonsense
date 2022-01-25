@@ -10,7 +10,7 @@ JobBatchName = "LM PIPELINE"
 
 # --------------------------------------------
 
-model_path = /vol/research/lyc_d/comet/zh_comet/checkpoint_baseline
+model_path = /vol/research/lyc_d/comet/zh_comet/checkpoint_$(model_type)
 beam = 5
 
 # Executable and its arguments
@@ -24,9 +24,9 @@ docker_image     = nvidia/cuda:10.2-cudnn7-runtime-ubuntu16.04
 
 # -------------------------------------------------
 # Event, out and error logs
-log    = c$(cluster).p$(process).lmpipe.log
-output = c$(cluster).p$(process).lmpipe.out
-error  = c$(cluster).p$(process).lmpipe.error
+log    = c$(cluster).p$(process).$(model_type).lmpipe.log
+output = c$(cluster).p$(process).$(model_type).lmpipe.out
+error  = c$(cluster).p$(process).$(model_type).lmpipe.error
 
 # -----------------------------------
 # File Transfer, Input, Output
@@ -62,5 +62,5 @@ request_memory   = 8G
 
 # -----------------------------------
 # Queue commands
-queue 1 
+queue 1 model_type in distill, baseline
 
