@@ -17,7 +17,7 @@ output_file = $(input_file).out
 executable    = $ENV(HOME)/.conda/envs/lyc/bin/python
 arguments     = $ENV(HOME)/comet-commonsense/scripts/generate/generate_conceptnet_txt.py \
   --device 0 \
-  --model_file /vol/research/lyc_d/pretrained_models/conceptnet_pretrained_model.pickle \
+  --model_file /vol/research/lyc_d/comet/pretrained_models/conceptnet_pretrained_model.pickle \
   --sampling_algorithm beam-5 \
   --input_file $(input_file) \
   --output_file $(output_file)

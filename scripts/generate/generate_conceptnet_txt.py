@@ -4,10 +4,12 @@ import argparse
 import torch
 
 sys.path.append(os.getcwd())
+sys.path.append('/user/HS502/yl02706/comet-commonsense/')
 
 import src.data.data as data
 import src.data.config as cfg
 import src.interactive.functions as interactive
+import pickle
 
 
 if __name__ == "__main__":
@@ -43,11 +45,15 @@ if __name__ == "__main__":
         for line in f:
             if not line:
                 continue
-            event, relation, sample_method = line.split('\t')
+            event, relation = line.strip().split('\t')
             outputs = interactive.get_conceptnet_sequence(
                 event, model, sampler, data_loader, text_encoder, relation)
-            outputs = outputs['relation']
-    with open(args.output_file, 'w', encoding='utf-8') as f:
-        for r in results:
-            f.wirte(','.join(r)+'\n')
+            print(outputs)
+            outputs = outputs[relation]
+            results.append(outputs)
+    # with open(args.output_file, 'w', encoding='utf-8') as f:
+    #     for r in results:
+    #         f.wirte(','.join(r)+'\n')
+    with open(args.output_file, 'wb') as f:
+        pickle.dump(results, f)
     print(f'write results to {args.output_file}')

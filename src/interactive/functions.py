@@ -9,6 +9,7 @@ import src.train.batch as batch_utils
 from src.evaluate.sampler import BeamSampler, GreedySampler, TopKSampler
 
 import utils.utils as utils
+import os
 
 
 def load_model_file(model_file):
@@ -27,6 +28,10 @@ def load_data(dataset, opt):
     # Initialize TextEncoder
     encoder_path = "model/encoder_bpe_40000.json"
     bpe_path = "model/vocab_40000.bpe"
+    if not os.path.exists(encoder_path):
+        encoder_path = os.path.join("/user/HS502/yl02706/comet-commonsense/", encoder_path)
+        bpe_path = os.path.join("/user/HS502/yl02706/comet-commonsense/", bpe_path)
+        assert os.path.exists(encoder_path)
     text_encoder = TextEncoder(encoder_path, bpe_path)
     text_encoder.encoder = data_loader.vocab_encoder
     text_encoder.decoder = data_loader.vocab_decoder
@@ -60,6 +65,9 @@ def load_conceptnet_data(opt):
     path = "data/conceptnet/processed/generation/{}.pickle".format(
     utils.make_name_string(opt.data))
     data_loader = data.make_data_loader(opt)
+    if not os.path.exists(path):
+        path = os.path.join("/user/HS502/yl02706/comet-commonsense/", path)
+        assert os.path.exists(path)
     loaded = data_loader.load_data(path)
     return data_loader
 
