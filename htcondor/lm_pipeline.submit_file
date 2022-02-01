@@ -13,7 +13,7 @@ JobBatchName = "LM PIPELINE"
 model_path = /vol/research/lyc_d/comet/zh_comet/checkpoint_$(model_type)
 beam = 5
 input_file = $ENV(HOME)/comet-commonsense/data/predict/atomic_trans.test
-output_file = $(input_file).out
+output_file = $(input_file).$(model_type).out
 
 # Executable and its arguments
 executable    = $ENV(HOME)/.conda/envs/lyc/bin/python

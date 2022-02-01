@@ -10,7 +10,7 @@ if __name__ == '__main__':
 
     tokenizer = BertTokenizer.from_pretrained("bert-base-chinese")
     model = GPT2LMHeadModel.from_pretrained(model_name)
-    text_generator = TextGenerationPipeline(model, tokenizer)
+    text_generator = TextGenerationPipeline(model, tokenizer, device = 0)
 
     results = []
     with open(input_file, 'r', encoding='utf-8') as f:
